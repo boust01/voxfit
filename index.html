@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoxFit AI - Assistant Vocal</title>
+    <style>
+        body { font-family: -apple-system, system-ui, sans-serif; background: #121212; color: white; text-align: center; padding: 20px; }
+        .card { background: #1e1e1e; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-top: 50px; }
+        button { background: #007aff; color: white; border: none; padding: 20px 40px; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; transition: transform 0.2s; }
+        button:active { transform: scale(0.95); background: #0056b3; }
+        .status { margin-top: 20px; color: #888; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>VOXFIT AI</h1>
+        <p>Prêt pour ta séance ?</p>
+        
+        <button onclick="declencherBriefing()">JE SUIS À LA SALLE</button>
+        
+        <div id="status" class="status">En attente...</div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION PARAMÉTRABLE ---
+        const seanceDuJour = {
+            nom: "Séance A - Pousse",
+            muscles: ["Pectoraux", "Triceps"],
+            nbExercices: 5
+        };
+
+        function declencherBriefing() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerText = "L'IA prépare ton briefing...";
+
+            // 1. Préparation du texte (Français International)
+            const texte = `Salut ! Bienvenue à la salle. Aujourd'hui, on s'attaque à la ${seanceDuJour.nom}. On va bosser les ${seanceDuJour.muscles.join(' et ')}. Tu as ${seanceDuJour.nbExercices} exercices au menu. Prêt à donner ton maximum ?`;
+
+            // 2. Moteur Vocal (Speech Synthesis)
+            const synthese = window.speechSynthesis;
+            const parole = new SpeechSynthesisUtterance(texte);
+            
+            // Paramètres de la voix
+            parole.lang = 'fr-CA'; // Français international / Québec
+            parole.rate = 0.9;     // Vitesse naturelle
+            parole.pitch = 1.0;    // Ton de voix
+
+            // 3. Exécution
+            synthese.speak(parole);
+
+            parole.onend = () => {
+                statusDiv.innerText = "Briefing terminé. En attente de ta réponse...";
+            };
+        }
+    </script>
+</body>
+</html>
